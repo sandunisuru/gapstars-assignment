@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Mongoose, Schema } from "mongoose";
 import { Task } from "../helpers/types/task.types";
 
 const TaskSchema: Schema = new Schema({
@@ -6,6 +6,7 @@ const TaskSchema: Schema = new Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
     status: { type: String, required: true },
+    depends_on: { type: Array },
     priority: { type: Number, required: true }
 },
     {

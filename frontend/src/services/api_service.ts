@@ -16,9 +16,9 @@ const api = {
             }
         }
     },
-    addNewTask: async ({ title, description, priority }: { title: string, description: string, priority: number }): Promise<Task> => {
+    addNewTask: async ({ title, description, priority, depends_on }: { title: string, description: string, priority: number, depends_on: Array<string> }): Promise<Task> => {
         try {
-            const response = await axios.post<ApiResponse<Task>>(`${API_BASE_URL}/api/tasks`, { title, description, priority });
+            const response = await axios.post<ApiResponse<Task>>(`${API_BASE_URL}/api/tasks`, { title, description, priority, depends_on });
             return response.data.data;
         } catch (error) {
             if (error instanceof Error) {

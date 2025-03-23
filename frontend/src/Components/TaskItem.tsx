@@ -9,6 +9,7 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import { useTaskContext } from "../Providers/TaskProvider";
 import { useDialogContext } from "../Providers/DialogProvider";
 import { Task } from "../helpers/types/task.types";
+import { filter, some } from "lodash";
 
 type TaskItemProps = {
     task: Task
@@ -16,7 +17,7 @@ type TaskItemProps = {
 
 const TaskItem: React.FC<TaskItemProps> = ({ task }: TaskItemProps) => {
 
-    const { deleteTask, updateTask, setCurrentTask } = useTaskContext();
+    const { tasks, deleteTask, updateTask, setCurrentTask } = useTaskContext();
     const { openWarningDialog, closeWarningDialog, openEditTaskModal } = useDialogContext();
 
     const clickOnDeleteButton = () => {
@@ -34,20 +35,35 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }: TaskItemProps) => {
     }
 
     const changeStatus = () => {
-        openWarningDialog({
-            title: `Change Status`,
-            message: `Do you want to mark as ${task.status === Status.DONE ? "Not done" : "Done"}`,
-            cancelButtonText: "Cancel",
-            successButtonText: "Yes!",
-            onClickCancelButton: () => closeWarningDialog(),
-            onClickSuccessButton: () => {
-                updateTask(task.id, {
-                    ...task,
-                    status: task.status === Status.DONE ? Status.NOT_DONE : Status.DONE
-                })
-                closeWarningDialog();
-            }
-        })
+
+        const dependedTaskIds = task.depends_on || [];
+        const dependedTasks = filter(tasks, (task) => dependedTaskIds.includes(task.id));
+
+        if (some(dependedTasks, { "status": Status.NOT_DONE })) {
+            openWarningDialog({
+                title: `Failed!`,
+                message: `You have depended tasks which is not done yet.`,
+                cancelButtonText: "",
+                successButtonText: "Okay",
+                onClickCancelButton: () => closeWarningDialog(),
+                onClickSuccessButton: () => closeWarningDialog()
+            })
+        } else {
+            openWarningDialog({
+                title: `Change Status`,
+                message: `Do you want to mark as ${task.status === Status.DONE ? "Not done" : "Done"}`,
+                cancelButtonText: "Cancel",
+                successButtonText: "Yes!",
+                onClickCancelButton: () => closeWarningDialog(),
+                onClickSuccessButton: () => {
+                    updateTask(task.id, {
+                        ...task,
+                        status: task.status === Status.DONE ? Status.NOT_DONE : Status.DONE
+                    })
+                    closeWarningDialog();
+                }
+            })
+        }
     }
 
     const onClickEditTask = () => {

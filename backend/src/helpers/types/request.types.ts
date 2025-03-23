@@ -5,6 +5,7 @@ export type TaskCreateRequest = {
     title: string;
     description: string;
     priority: Priority;
+    depends_on: Array<string>;
 }
 
 export type TaskUpdateRequest = {
@@ -12,4 +13,5 @@ export type TaskUpdateRequest = {
     description: string;
     priority: Priority;
     status: Status;
+    depends_on: Array<string>;
 }

@@ -11,7 +11,7 @@ interface TaskContextType {
     openEditTaskModal: () => void;
     closeEditTaskModal: () => void;
     fetchTasks: () => void;
-    addNewTask: (task: { title: string, description: string, priority: number }) => void;
+    addNewTask: (task: { title: string, description: string, priority: number, depends_on: Array<string> }) => void;
     deleteTask: (id: string) => void;
     updateTask: (id: string, task: Task) => void;
 }
@@ -48,8 +48,8 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }: TaskProv
         setTasks(allTasks);
     }
 
-    const addNewTask = async ({ title, description, priority }: { title: string, description: string, priority: number }) => {
-        await api.addNewTask({ title, description, priority });
+    const addNewTask = async ({ title, description, priority, depends_on }: { title: string, description: string, priority: number, depends_on: Array<string> }) => {
+        await api.addNewTask({ title, description, priority, depends_on });
         fetchTasks();
     }
 

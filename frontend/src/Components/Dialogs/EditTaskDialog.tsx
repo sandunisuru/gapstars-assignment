@@ -1,6 +1,8 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Rating, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, ListItemText, MenuItem, OutlinedInput, Rating, Select, Stack, TextField, Typography } from "@mui/material";
 import React from "react";
 import { useTaskContext } from "../../Providers/TaskProvider";
+import { renderValues } from "../../helpers/functions/helper";
+import { filter } from "lodash";
 
 type EditTaskDialogPorps = {
     open: boolean;
@@ -8,8 +10,19 @@ type EditTaskDialogPorps = {
     onSave: (task: any) => void;
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
 const EditTaskDialog: React.FC<EditTaskDialogPorps> = ({ open, onClose, onSave }: EditTaskDialogPorps) => {
-    const { currentTask, setCurrentTask } = useTaskContext();
+    const { tasks, currentTask, setCurrentTask } = useTaskContext();
 
     const onClickClose = () => {
         setCurrentTask(null);
@@ -48,12 +61,30 @@ const EditTaskDialog: React.FC<EditTaskDialogPorps> = ({ open, onClose, onSave }
                             <FormControl>
                                 <Typography component="article">Priority</Typography>
                                 <Rating
-                                    onChange={(event, newValue) => {
+                                    onChange={(_event, newValue) => {
                                         setCurrentTask({ ...currentTask, priority: newValue || 1 });
                                     }}
                                     defaultValue={currentTask?.priority || 0}
                                     max={3}
                                 />
+                            </FormControl>
+                            <FormControl>
+                                <Typography component="article">Depends on</Typography>
+                                <Select
+                                    multiple
+                                    value={currentTask.depends_on}
+                                    onChange={(event) => setCurrentTask({ ...currentTask, depends_on: event.target.value as Array<string> })}
+                                    input={<OutlinedInput label="Depends On" />}
+                                    renderValue={(selected) => renderValues(selected, tasks)}
+                                    MenuProps={MenuProps}
+                                >
+                                    {filter(tasks, (t) => t.id !== currentTask?.id).map((task) => (
+                                        <MenuItem key={task.id} value={task.id}>
+                                            <Checkbox checked={currentTask.depends_on.includes(task.id)} />
+                                            <ListItemText primary={task.title} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
                             </FormControl>
                         </Stack>
                     </DialogContent>

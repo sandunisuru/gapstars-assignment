@@ -7,6 +7,7 @@ export type Task = {
     description: string;
     status: Status;
     priority: Priority;
+    depends_on: Array<string>;
     createdAt: Date;
     updatedAt: Date;
 }

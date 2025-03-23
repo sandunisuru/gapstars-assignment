@@ -21,8 +21,8 @@ const AllTasks: React.FC = () => {
         fetchTasks();
     }, []);
 
-    const addTask = async ({ title, description, priority }: { title: string, description: string, priority: number }) => {
-        addNewTask({ title, description, priority });
+    const addTask = async ({ title, description, priority, depends_on }: { title: string, description: string, priority: number, depends_on: Array<string> }) => {
+        addNewTask({ title, description, priority, depends_on });
     }
 
     const editTask = async (task: Task)  => {

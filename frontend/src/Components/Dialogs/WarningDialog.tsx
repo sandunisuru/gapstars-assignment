@@ -18,8 +18,8 @@ const WarningDialog: React.FC<WarningDialogProps> = ({ options, open }: WarningD
             </DialogContent>
             <DialogActions>
                 <Box sx={{ flexGrow: 0 }}>
-                    <Button onClick={options.onClickCancelButton}>{options.cancelButtonText || "Cancel"}</Button>
-                    <Button onClick={options.onClickSuccessButton} color="primary">{options.successButtonText || "Okay"}</Button>
+                    {options.cancelButtonText !== "" && (<Button onClick={options.onClickCancelButton}>{options.cancelButtonText || "Cancel"}</Button>)}
+                    {options.successButtonText !== "" && (<Button onClick={options.onClickSuccessButton} color="primary">{options.successButtonText || "Okay"}</Button>)}
                 </Box>
             </DialogActions>
         </Dialog >

@@ -7,12 +7,13 @@ import { Request, Response } from "express";
 
 export const createTask = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { title, description, priority } = req.body as TaskCreateRequest;
+        const { title, description, priority, depends_on } = req.body as TaskCreateRequest;
         const newTask: Task = {
             title,
             description,
             priority,
             id: uniqid(),
+            depends_on,
             status: Status.NOT_DONE,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -65,7 +66,7 @@ export const deleteTask = async (req: Request, res: Response): Promise<void> => 
 export const updateTask = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
-        const { title, description, priority, status } = req.body as TaskUpdateRequest;
+        const { title, description, priority, status, depends_on } = req.body as TaskUpdateRequest;
         const task
             = await taskModel.findOneAndUpdate
                 ({
@@ -76,6 +77,7 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
                         description,
                         priority,
                         status,
+                        depends_on,
                         updatedAt: new Date()
                     },
                     {
