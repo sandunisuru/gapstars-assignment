@@ -10,6 +10,7 @@ import { useDialogContext } from '../Providers/DialogProvider';
 import WarningDialog from './Dialogs/WarningDialog';
 import EditTaskDialog from './Dialogs/EditTaskDialog';
 import { Task } from '../helpers/types/task.types';
+import { Recurrency } from '../helpers/types/recurrency.types';
 
 const AllTasks: React.FC = () => {
     const [sortBy, setSortBy] = React.useState("status");
@@ -21,8 +22,8 @@ const AllTasks: React.FC = () => {
         fetchTasks();
     }, []);
 
-    const addTask = async ({ title, description, priority, depends_on }: { title: string, description: string, priority: number, depends_on: Array<string> }) => {
-        addNewTask({ title, description, priority, depends_on });
+    const addTask = async ({ title, description, priority, depends_on, recurrency }: { title: string, description: string, priority: number, depends_on: Array<string>, recurrency: Recurrency }) => {
+        addNewTask({ title, description, priority, depends_on, recurrency });
     }
 
     const editTask = async (task: Task)  => {

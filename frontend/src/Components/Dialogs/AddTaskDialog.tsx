@@ -1,7 +1,9 @@
 import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, ListItemText, MenuItem, OutlinedInput, Rating, Select, Stack, TextField, Typography } from "@mui/material";
 import React from "react";
 import { useTaskContext } from "../../Providers/TaskProvider";
-import { renderValues } from "../../helpers/functions/helper";
+import { recurrentTimes, renderValues } from "../../helpers/functions/helper";
+import { Recurrency } from "../../helpers/types/recurrency.types";
+import { find } from "lodash";
 
 type AddTaskDialogProps = {
     open: boolean;
@@ -13,7 +15,8 @@ const initialValues = {
     title: '',
     description: '',
     priority: 1,
-    depends_on: [] as Array<string>
+    depends_on: [] as Array<string>,
+    recurrency: { time: 0, text: "None" } as Recurrency
 }
 
 const ITEM_HEIGHT = 48;
@@ -84,6 +87,17 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ open, onClose, onAdd }: A
                                     <Checkbox checked={newTaskFields.depends_on.includes(task.id)} />
                                     <ListItemText primary={task.title} />
                                 </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <FormControl>
+                        <Typography component="article">Recurrency</Typography>
+                        <Select
+                            value={newTaskFields.recurrency.time}
+                            onChange={(event) => setNewTaskFields({ ...newTaskFields, recurrency: find(recurrentTimes, (t) => t.time === parseInt(event.target.value as string)) || initialValues.recurrency })}
+                        >
+                            {recurrentTimes.map((recurrent) => (
+                                <MenuItem value={recurrent.time}>{recurrent.text}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>

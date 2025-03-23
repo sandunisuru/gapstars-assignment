@@ -1,8 +1,8 @@
 import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, ListItemText, MenuItem, OutlinedInput, Rating, Select, Stack, TextField, Typography } from "@mui/material";
 import React from "react";
 import { useTaskContext } from "../../Providers/TaskProvider";
-import { renderValues } from "../../helpers/functions/helper";
-import { filter } from "lodash";
+import { recurrentTimes, renderValues } from "../../helpers/functions/helper";
+import { filter, find } from "lodash";
 
 type EditTaskDialogPorps = {
     open: boolean;
@@ -83,6 +83,17 @@ const EditTaskDialog: React.FC<EditTaskDialogPorps> = ({ open, onClose, onSave }
                                             <Checkbox checked={currentTask.depends_on.includes(task.id)} />
                                             <ListItemText primary={task.title} />
                                         </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <FormControl>
+                                <Typography component="article">Recurrency</Typography>
+                                <Select
+                                    value={currentTask?.recurrency?.time || 0}
+                                    onChange={(event) => setCurrentTask({ ...currentTask, recurrency: find(recurrentTimes, (t) => t.time === parseInt(event.target.value as string)) || recurrentTimes[0] })}
+                                >
+                                    {recurrentTimes.map((recurrent) => (
+                                        <MenuItem value={recurrent.time}>{recurrent.text}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>

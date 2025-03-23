@@ -7,11 +7,12 @@ const TaskSchema: Schema = new Schema({
     description: { type: String, required: true },
     status: { type: String, required: true },
     depends_on: { type: Array },
+    recurrency: { type: Object },
     priority: { type: Number, required: true }
 },
     {
-        timestamps: true, 
-        versionKey: false, 
+        timestamps: true,
+        versionKey: false,
     }
 );
 

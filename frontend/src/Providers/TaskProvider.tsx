@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { Task } from "../helpers/types/task.types";
 import api from "../services/api_service";
+import { Recurrency } from "../helpers/types/recurrency.types";
 
 interface TaskContextType {
     tasks: Task[];
@@ -11,7 +12,7 @@ interface TaskContextType {
     openEditTaskModal: () => void;
     closeEditTaskModal: () => void;
     fetchTasks: () => void;
-    addNewTask: (task: { title: string, description: string, priority: number, depends_on: Array<string> }) => void;
+    addNewTask: (task: { title: string, description: string, priority: number, depends_on: Array<string>, recurrency: Recurrency }) => void;
     deleteTask: (id: string) => void;
     updateTask: (id: string, task: Task) => void;
 }
@@ -48,8 +49,8 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }: TaskProv
         setTasks(allTasks);
     }
 
-    const addNewTask = async ({ title, description, priority, depends_on }: { title: string, description: string, priority: number, depends_on: Array<string> }) => {
-        await api.addNewTask({ title, description, priority, depends_on });
+    const addNewTask = async ({ title, description, priority, depends_on, recurrency }: { title: string, description: string, priority: number, depends_on: Array<string>, recurrency: Recurrency }) => {
+        await api.addNewTask({ title, description, priority, depends_on, recurrency });
         fetchTasks();
     }
 

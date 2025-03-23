@@ -2,6 +2,8 @@ import express from 'express';
 import tasksController from './controllers/tasksController';
 import { connectDB, disconnectDB } from './config/db';
 import cors from 'cors';
+import cron from 'node-cron';
+import { runCronForRecurrentTaskGeneration } from './services/cronService';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -49,5 +51,7 @@ const startServer = async () => {
     process.exit(1);
   }
 }
+
+cron.schedule('* * * * *', () => runCronForRecurrentTaskGeneration())
 
 startServer();

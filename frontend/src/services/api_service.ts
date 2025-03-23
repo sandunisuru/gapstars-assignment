@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ApiResponse } from "../helpers/types/api_response.types";
 import { Task } from "../helpers/types/task.types";
+import { Recurrency } from "../helpers/types/recurrency.types";
 
 const API_BASE_URL = 'http://localhost:3000';
 const api = {
@@ -16,9 +17,9 @@ const api = {
             }
         }
     },
-    addNewTask: async ({ title, description, priority, depends_on }: { title: string, description: string, priority: number, depends_on: Array<string> }): Promise<Task> => {
+    addNewTask: async ({ title, description, priority, depends_on, recurrency }: { title: string, description: string, priority: number, depends_on: Array<string>, recurrency: Recurrency }): Promise<Task> => {
         try {
-            const response = await axios.post<ApiResponse<Task>>(`${API_BASE_URL}/api/tasks`, { title, description, priority, depends_on });
+            const response = await axios.post<ApiResponse<Task>>(`${API_BASE_URL}/api/tasks`, { title, description, priority, depends_on, recurrency });
             return response.data.data;
         } catch (error) {
             if (error instanceof Error) {
