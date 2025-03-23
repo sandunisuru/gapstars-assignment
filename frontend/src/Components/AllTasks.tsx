@@ -8,12 +8,14 @@ import { useTaskContext } from '../Providers/TaskProvider';
 import AddTaskDialog from './Dialogs/AddTaskDialog';
 import { useDialogContext } from '../Providers/DialogProvider';
 import WarningDialog from './Dialogs/WarningDialog';
+import EditTaskDialog from './Dialogs/EditTaskDialog';
+import { Task } from '../helpers/types/task.types';
 
 const AllTasks: React.FC = () => {
     const [sortBy, setSortBy] = React.useState("status");
     const [direction, setDirection] = React.useState("asc");
-    const { tasks, setTasks, fetchTasks, addNewTask } = useTaskContext();
-    const { isCreateTaskModalOpen, closeCreateTaskModal, isWarningDialogOpen, warningDialogOptions } = useDialogContext();
+    const { tasks, setTasks, fetchTasks, addNewTask, updateTask } = useTaskContext();
+    const { isCreateTaskModalOpen, closeCreateTaskModal, isWarningDialogOpen, warningDialogOptions, isEditTaskModalOpen, closeEditTaskModal } = useDialogContext();
 
     useEffect(() => {
         fetchTasks();
@@ -21,6 +23,10 @@ const AllTasks: React.FC = () => {
 
     const addTask = async ({ title, description, priority }: { title: string, description: string, priority: number }) => {
         addNewTask({ title, description, priority });
+    }
+
+    const editTask = async (task: Task)  => {
+        updateTask(task.id, task);
     }
 
     useEffect(() => {
@@ -47,6 +53,7 @@ const AllTasks: React.FC = () => {
                     ))}
                 </Grid>
                 <AddTaskDialog open={isCreateTaskModalOpen} onClose={closeCreateTaskModal} onAdd={addTask} />
+                <EditTaskDialog open={isEditTaskModalOpen} onClose={closeEditTaskModal} onSave={editTask}/>
                 <WarningDialog open={isWarningDialogOpen} options={warningDialogOptions}/>
             </Box>
         </Container>

@@ -16,8 +16,8 @@ type TaskItemProps = {
 
 const TaskItem: React.FC<TaskItemProps> = ({ task }: TaskItemProps) => {
 
-    const { deleteTask, updateTask } = useTaskContext();
-    const { openWarningDialog, closeWarningDialog } = useDialogContext();
+    const { deleteTask, updateTask, setCurrentTask } = useTaskContext();
+    const { openWarningDialog, closeWarningDialog, openEditTaskModal } = useDialogContext();
 
     const clickOnDeleteButton = () => {
         openWarningDialog({
@@ -50,6 +50,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }: TaskItemProps) => {
         })
     }
 
+    const onClickEditTask = () => {
+        setCurrentTask(task);
+        openEditTaskModal();
+    }
+
     return (
         <Card >
             <CardHeader title={task.title}></CardHeader>
@@ -66,7 +71,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }: TaskItemProps) => {
                 <Box sx={{ flexGrow: 0 }}>
                     <ButtonGroup variant="contained" aria-label="Basic button group" size="small">
                         <Tooltip title="Edit" placement="top" arrow>
-                            <Button>
+                            <Button onClick={onClickEditTask}>
                                 <EditIcon />
                             </Button>
                         </Tooltip>

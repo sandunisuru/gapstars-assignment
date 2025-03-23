@@ -7,6 +7,11 @@ interface DialogContextType {
     openCreateTaskModal: () => void;
     closeCreateTaskModal: () => void;
 
+    //Edit Task Dialog
+    isEditTaskModalOpen: boolean;
+    openEditTaskModal: () => void;
+    closeEditTaskModal: () => void;
+
     //Warning Dialog
     isWarningDialogOpen: boolean;
     warningDialogOptions: WarningDialogOpetions;
@@ -30,6 +35,7 @@ interface DialpgProviderProps {
 
 export const DialogProvider: React.FC<DialpgProviderProps> = ({ children }: DialpgProviderProps) => {
     const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
+    const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
     const [isWarningDialogOpen, setIsWarningDialogOpen] = useState(false);
     const [warningDialogOptions, setWarningDialogOptions] = useState<WarningDialogOpetions>({
         title: "Warning",
@@ -48,6 +54,14 @@ const closeCreateTaskModal = () => {
     setIsCreateTaskModalOpen(false);
 }
 
+const openEditTaskModal = () => {
+    setIsEditTaskModalOpen(true);
+}
+
+const closeEditTaskModal = () => {
+    setIsEditTaskModalOpen(false);
+}
+
 const openWarningDialog = (options: WarningDialogOpetions) => {
     setWarningDialogOptions(options);
     setIsWarningDialogOpen(true);
@@ -62,6 +76,11 @@ return (
         isCreateTaskModalOpen,
         openCreateTaskModal,
         closeCreateTaskModal,
+
+        isEditTaskModalOpen,
+        openEditTaskModal,
+        closeEditTaskModal,
+
         isWarningDialogOpen,
         warningDialogOptions,
         openWarningDialog,
